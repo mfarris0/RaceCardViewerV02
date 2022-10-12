@@ -1,0 +1,37 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.32802.440
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RaceCardViewer.CoreConsole", "RaceCardViewer.CoreConsole\RaceCardViewer.CoreConsole.csproj", "{F6735A6E-E1B0-4060-A12E-A92D42CE70B4}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RaceCardViewer.Business", "RaceCardViewer.Business\RaceCardViewer.Business.csproj", "{E815E25F-5B57-48B1-B019-9E1027DED20D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RaceCardViewer.Utility", "RaceCardViewer.Utility\RaceCardViewer.Utility.csproj", "{E2C861FC-BAEE-4DEC-92AA-2875173C84F3}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{F6735A6E-E1B0-4060-A12E-A92D42CE70B4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F6735A6E-E1B0-4060-A12E-A92D42CE70B4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F6735A6E-E1B0-4060-A12E-A92D42CE70B4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F6735A6E-E1B0-4060-A12E-A92D42CE70B4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E815E25F-5B57-48B1-B019-9E1027DED20D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E815E25F-5B57-48B1-B019-9E1027DED20D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E815E25F-5B57-48B1-B019-9E1027DED20D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E815E25F-5B57-48B1-B019-9E1027DED20D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E2C861FC-BAEE-4DEC-92AA-2875173C84F3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E2C861FC-BAEE-4DEC-92AA-2875173C84F3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E2C861FC-BAEE-4DEC-92AA-2875173C84F3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E2C861FC-BAEE-4DEC-92AA-2875173C84F3}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {E7D77F62-68F4-4856-8650-D0EF205E1DDF}
+	EndGlobalSection
+EndGlobal
