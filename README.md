@@ -16,8 +16,8 @@ The application will be written in C# and target .NET Core 3.1. It will demonstr
 
 ## Minimum Feature List Requirements To Be Implemented
 
- > Implement a “master loop” console application where the user can repeatedly enter commands/perform actions, including choosing to exit the program.
- > Create a dictionary or list, populate it with several values, retrieve at least one value, and use it in the program.
- > Implement a log that records errors, invalid inputs, or other important events and writes them to a text file.
- > Read data from an external file, such as text, JSON, CSV, etc and use that data in the application.
- > Use a LINQ query to retrieve information from a data structure (such as a list or array) or file.
+ - Implement a “master loop” console application where the user can repeatedly enter commands/perform actions, including choosing to exit the program.
+ - Create a dictionary or list, populate it with several values, retrieve at least one value, and use it in the program.
+ - Implement a log that records errors, invalid inputs, or other important events and writes them to a text file.
+ - Read data from an external file, such as text, JSON, CSV, etc and use that data in the application.
+ - Use a LINQ query to retrieve information from a data structure (such as a list or array) or file.
