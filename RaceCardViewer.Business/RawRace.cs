@@ -1,34 +1,41 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace RaceCardViewer.Business
 {
     public class RawRace
     {
-        public RawRace(string rawRaceCardId, string rawRaceDayId, string postPosition, string horseName, string morningLineOdds, string jockeyName, string weightAllowed, string trainerName)
+        public RawRace(string rawRaceDayId, string raceNumber, string purse, string raceType, string classification, string distance, string surface, string numberOfEntries, string postTime)
         {
-            RawRaceCardId = rawRaceCardId;
-            PostPosition = postPosition;
-            HorseName = horseName;
-            MorningLineOdds = morningLineOdds;
-            JockeyName = jockeyName;
-            WeightAllowed = weightAllowed;
-            TrainerName = trainerName;
+            RawRaceDayId = rawRaceDayId;
+            RaceNumber = raceNumber;
+            Purse = purse;
+            RaceType = raceType;
+            Classification = classification;
+            Distance = distance;
+            Surface = surface;
+            NumberOfEntries = numberOfEntries;
+            PostTime = postTime;
             SetId();
         }
 
         private void SetId()
         {
-            RawRaceId = $"{RawRaceCardId}{PostPosition.PadLeft(2,'0')}";
+            RawRaceId = $"{RawRaceDayId}{RaceNumber.PadLeft(2,'0')}";
         }
-        public string RawRaceId { get; private set; }
-        public string RawRaceCardId { get; private set; }
-        public string PostPosition { get; }
-        public string HorseName { get; }
-        public string MorningLineOdds { get; }
-        public string JockeyName { get; }
-        public string WeightAllowed { get; }
-        public string TrainerName { get; }
-    }
 
+        public string RawRaceId { get; private set; }
+        public string RawRaceDayId { get; }
+        public string RaceNumber { get; }
+        public string Purse { get; }
+        public string RaceType { get; }
+        public string Classification { get; }
+        public string Distance { get; }
+        public string Surface { get; }
+        public string NumberOfEntries { get; }
+        public string PostTime { get; }
+        public IEnumerable<RawRaceHorse> RaceHorseList { get; set; }
+
+    }
 
 }

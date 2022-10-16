@@ -1,4 +1,7 @@
-﻿namespace RaceCardViewer.Business
+﻿using System;
+using System.Collections.Generic;
+
+namespace RaceCardViewer.Business
 {
     public class RawRaceDay
     {
@@ -18,6 +21,7 @@
 
         public string RaceDate { get; }
         public string Track { get; }
+        public IEnumerable<RawRace> RaceCard { get; set; }
 
     }
 
