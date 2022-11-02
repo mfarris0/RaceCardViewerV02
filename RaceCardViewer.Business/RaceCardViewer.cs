@@ -5,9 +5,9 @@ namespace RaceCardViewer.Business
     public class RaceCardViewer
     {
 
-        public RawRaceDay RawRaceDay { get; private set; }
-        public IEnumerable<RawRace> RaceCard { get; private set; }
-        public IEnumerable<RawRaceHorse> RaceHorseList { get; private set; }
+        public RawRaceDay RawRaceDay { get; set; }
+        public List<RawRace> RaceCard { get; set; } = new List<RawRace>();
+        public List<RawRaceHorse> RaceHorseList { get; set; } = new List<RawRaceHorse>();
 
     }
 

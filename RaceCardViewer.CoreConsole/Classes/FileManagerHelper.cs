@@ -9,25 +9,25 @@ namespace RaceCardViewer.CoreConsole
 {
     public class FileManagerHelper
     {
-        private const string SampleFilesZipFile = "SampleFiles.zip";
-        private const int StarterFileCount = 12;
+        private const string SampleFilesZipFile = "SampleFiles.zip"; //todo 20221030: move  this to app.config
+        private const int StarterFileCount = 9; //todo 20221030: move  this to app.config
         public static bool StarterFilesExist(DirectoryManager directoryManager, FileManager fileManager)
         {
             bool result = false;
 
-            LoadFiles(directoryManager, fileManager);
+            LoadDataFileList(directoryManager, fileManager);
             if(fileManager.DataFileList.Count() == StarterFileCount)
             {
                 result = true;
             }
             return result;
         }
-        public static void LoadFiles(DirectoryManager directoryManager, FileManager fileManager)
+        public static void LoadDataFileList(DirectoryManager directoryManager, FileManager fileManager)
         {
             fileManager.DataFileList = directoryManager.StarterDataFileDirectory.GetFiles().ToList();
         }
 
-        public static OperationResult CopyStarterFilesToDataDirectory(DirectoryManager directoryManager)
+        public static OperationResult CopySampleFilesToStarterDataDirectory(DirectoryManager directoryManager)
         {
             OperationResult operationResult = new OperationResult();
 
@@ -39,7 +39,7 @@ namespace RaceCardViewer.CoreConsole
                 ZipFile.ExtractToDirectory(zipFileFullName.FullName, directoryManager.StarterDataFileDirectory.FullName);
                 zipFileFullName.Delete();
                 operationResult.Result = true;
-                operationResult.Message = "Starter file creationn successful.";
+                operationResult.Message = "done.";
             }
             catch (Exception e)
             {

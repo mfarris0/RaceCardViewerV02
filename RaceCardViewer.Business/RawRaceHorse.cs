@@ -4,15 +4,20 @@ namespace RaceCardViewer.Business
 {
     public class RawRaceHorse
     {
+        public RawRaceHorse()
+        {
+
+        }
+
         public RawRaceHorse(string rawRaceId, string postPosition, string horseName, string morningLineOdds, string jockeyName, string weightAllowed, string trainerName)
         {
-            RawRaceId = rawRaceId;
-            PostPosition = postPosition;
-            HorseName = horseName;
-            MorningLineOdds = morningLineOdds;
-            JockeyName = jockeyName;
-            WeightAllowed = weightAllowed;
-            TrainerName = trainerName;
+            this.RawRaceId = rawRaceId;
+            this.PostPosition = postPosition;
+            this.HorseName = horseName;
+            this.MorningLineOdds = morningLineOdds;
+            this.JockeyName = jockeyName;
+            this.WeightAllowed = weightAllowed;
+            this.TrainerName = trainerName;
             SetId();
         }
 
@@ -21,7 +26,7 @@ namespace RaceCardViewer.Business
             RawRaceHorseId = $"{RawRaceId}{PostPosition.PadLeft(2,'0')}";
         }
         public string RawRaceHorseId { get; private set; }
-        public string RawRaceId { get; private set; }
+        public string RawRaceId { get; }
         public string PostPosition { get; }
         public string HorseName { get; }
         public string MorningLineOdds { get; }

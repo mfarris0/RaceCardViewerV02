@@ -5,7 +5,8 @@ namespace RaceCardViewer.CoreConsole
 {
     class Program
     {
-        private const string ApplicationTitle = "Race Card Viewer";
+        
+        private const string ApplicationTitle = "Race Card Viewer"; //todo 20221030: move  this to app.config
         public static bool exit = false;
 
         static void Main(string[] args)
@@ -20,12 +21,26 @@ namespace RaceCardViewer.CoreConsole
             FileManager fileManager = new FileManager();
             Setup(directoryManager, fileManager);
 
+            while (!exit)
+            {
+                DisplayFileList(fileManager);
+            }
         }
 
+        private static void DisplayFileList(FileManager fileManager)
+        {
+            foreach (var file in fileManager.DataFileList)
+            {
+                Console.WriteLine(file.Name);
+                exit = true;
+            }
+        }
+
+        #region ----- Directory and File Setup -----
         private static void Setup(DirectoryManager directoryManager, FileManager fileManager)
         {
             SetupDirectories(directoryManager);
-            SetupStarterFiles(directoryManager, fileManager);
+            SetupSampleFiles(directoryManager, fileManager);
         }
 
         private static void SetupDirectories(DirectoryManager directoryManager)
@@ -49,15 +64,15 @@ namespace RaceCardViewer.CoreConsole
 
         }
 
-        private static void SetupStarterFiles(DirectoryManager directoryManager, FileManager fileManager)
+        private static void SetupSampleFiles(DirectoryManager directoryManager, FileManager fileManager)
         {
             if (!FileManagerHelper.StarterFilesExist(directoryManager, fileManager))
             {
-                Console.Write("Copying starter files... ");
-                OperationResult operationResult = FileManagerHelper.CopyStarterFilesToDataDirectory(directoryManager);
+                Console.Write("Copying sample files to starter directory... ");
+                OperationResult operationResult = FileManagerHelper.CopySampleFilesToStarterDataDirectory(directoryManager);
                 if (operationResult.Result == true)
                 {
-                    FileManagerHelper.LoadFiles(directoryManager, fileManager);
+                    FileManagerHelper.LoadDataFileList(directoryManager, fileManager);
                     Console.WriteLine(operationResult.Message);
                 }
                 else
@@ -68,6 +83,8 @@ namespace RaceCardViewer.CoreConsole
                 }
             }
         }
+
+        #endregion ----- Directory and File Setup -----
 
     }
 }

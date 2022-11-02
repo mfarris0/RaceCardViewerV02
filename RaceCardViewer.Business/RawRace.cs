@@ -5,7 +5,7 @@ namespace RaceCardViewer.Business
 {
     public class RawRace
     {
-        public RawRace(string rawRaceDayId, string raceNumber, string purse, string raceType, string classification, string distance, string surface, string numberOfEntries, string postTime)
+        public RawRace(string rawRaceDayId, string raceNumber, string purse, string raceType, string classification, string distance, string surface)
         {
             RawRaceDayId = rawRaceDayId;
             RaceNumber = raceNumber;
@@ -14,8 +14,6 @@ namespace RaceCardViewer.Business
             Classification = classification;
             Distance = distance;
             Surface = surface;
-            NumberOfEntries = numberOfEntries;
-            PostTime = postTime;
             SetId();
         }
 
@@ -32,8 +30,6 @@ namespace RaceCardViewer.Business
         public string Classification { get; }
         public string Distance { get; }
         public string Surface { get; }
-        public string NumberOfEntries { get; }
-        public string PostTime { get; }
         public IEnumerable<RawRaceHorse> RaceHorseList { get; set; }
 
     }
