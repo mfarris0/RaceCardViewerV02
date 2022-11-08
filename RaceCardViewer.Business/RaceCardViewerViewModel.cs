@@ -2,7 +2,7 @@
 
 namespace RaceCardViewer.Business
 {
-    public class RaceCardViewer
+    public class RaceCardViewerViewModel
     {
 
         public RawRaceDay RawRaceDay { get; set; }

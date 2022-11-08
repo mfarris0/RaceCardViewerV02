@@ -1,5 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 
 namespace RaceCardViewer.CoreConsole
 {
@@ -17,6 +19,11 @@ namespace RaceCardViewer.CoreConsole
 
         public  IEnumerable<FileInfo> DataFileList { get; set; }
 
+        internal FileInfo GetDataFile(string fileName)
+        {
+            FileInfo file = DataFileList.FirstOrDefault(f => f.Name == fileName);
+            return file;
+        }
     }
 
 }

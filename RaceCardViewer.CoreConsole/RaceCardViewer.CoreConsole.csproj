@@ -7,6 +7,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\RaceCardViewer.Business\RaceCardViewer.Business.csproj" />
     <ProjectReference Include="..\RaceCardViewer.Utility\RaceCardViewer.Utility.csproj" />
   </ItemGroup>
 

@@ -4,14 +4,15 @@ using System.IO;
 
 namespace RaceCardViewer.Business
 {
-    public class RaceCardViewerManager
+    public class RaceCardViewerViewModelManager
     {
-        public RaceCardViewerManager()
+        public RaceCardViewerViewModelManager()
         {
 
         }
 
-        public void Load(FileInfo file, RaceCardViewer raceCardViewer)
+
+        public void Load(FileInfo file, RaceCardViewerViewModel viewer)
         {
 
             TextFieldParser textFieldParser = GetTextFieldParser(file);
@@ -28,12 +29,12 @@ namespace RaceCardViewer.Business
                     {
                         if (currentRaceNumber == 1)
                         {
-                            LoadRaceDay(fields, raceCardViewer);
+                            LoadRaceDay(fields, viewer);
                         }
-                        AddRace(fields, raceCardViewer);
+                        AddRace(fields, viewer);
                         previousRaceNumber = currentRaceNumber;
                     }
-                    AddRaceHorse(fields, raceCardViewer);
+                    AddRaceHorse(fields, viewer);
                 }
                 else
                 {
@@ -57,27 +58,28 @@ namespace RaceCardViewer.Business
             return textFieldParser;
         }
 
-        private void LoadRaceDay(string[] fields, RaceCardViewer raceCardViewer)
+        private void LoadRaceDay(string[] fields, RaceCardViewerViewModel viewer)
         {
-            raceCardViewer.RawRaceDay = new RawRaceDay(fields[1], fields[0]);
+            viewer.RawRaceDay = new RawRaceDay(fields[1], fields[0]);
         }
 
-        private void AddRace(string[] fields, RaceCardViewer raceCardViewer)
+        private void AddRace(string[] fields, RaceCardViewerViewModel raceCardViewer)
         {
             RawRace rawRace = new RawRace(raceCardViewer.RawRaceDay.RawRaceDayId,
                                           raceNumber: fields[2],
                                           purse: fields[11],
                                           raceType: fields[8],
-                                          classification: fields[11],
+                                          classification: fields[10],
                                           distance: fields[5],
-                                          surface: fields[6]);
+                                          surface: fields[6],
+                                          conditions: fields[15]);
             raceCardViewer.RaceCard.Add(rawRace);
         }
 
-        private void AddRaceHorse(string[] fields, RaceCardViewer raceCardViewer)
+        private void AddRaceHorse(string[] fields, RaceCardViewerViewModel viewer)
         {
             RawRaceHorse rawRaceHorse = new RawRaceHorse(
-                                        rawRaceId: raceCardViewer.RaceCard[^1].RawRaceId,
+                                        rawRaceId: viewer.RaceCard[^1].RawRaceId,
                                         postPosition: fields[3],
                                         horseName: fields[44],
                                         morningLineOdds: fields[43],
@@ -86,7 +88,7 @@ namespace RaceCardViewer.Business
                                         trainerName: fields[27]
                                         );
 
-            raceCardViewer.RaceHorseList.Add(rawRaceHorse);
+            viewer.RaceHorseList.Add(rawRaceHorse);
         }
 
 
