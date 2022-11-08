@@ -9,12 +9,12 @@ namespace RaceCardViewer.CoreConsole
     class Program
     {
         private const string ApplicationTitle = "Race Card Viewer"; //todo 20221030: move  this to app.config
-        
+
         private static DirectoryManager directoryManager = new DirectoryManager(ApplicationTitle);
         private static FileManager fileManager = new FileManager();
 
         public static bool exit = false;
-        public static byte _noResponseCount = 0;
+        public static byte _invalidResponseCount = 0;
 
         static void Main(string[] args)
         {
@@ -26,7 +26,7 @@ namespace RaceCardViewer.CoreConsole
         private static void Run()
         {
             Console.Clear();
-            _noResponseCount = 0;
+            _invalidResponseCount = 0;
 
             var mainMenu = new Menu(fileManager.DataFileList);
             var menuPainter = new MenuPainter(mainMenu);
@@ -34,38 +34,54 @@ namespace RaceCardViewer.CoreConsole
 
             bool done = false;
 
-            Console.WriteLine("User arrow keys to select a file and press [Enter]. Press 'X' to exit application.");
+            DisplayMainMenuPrompt();
+
             while (!exit)
             {
-
-                menuPainter.Paint(0, 2);
+                menuPainter.Paint(0, 5);
 
                 ConsoleKeyInfo consoleKeyInfo = Console.ReadKey(true);
 
 
-                if (consoleKeyInfo.Key == ConsoleKey.X)
-                    DisplayGoodbye();
+
+                if (consoleKeyInfo.Key == ConsoleKey.Enter && mainMenu.SelectedIndex == -1)
+                {
+                    _invalidResponseCount++;
+                    if (_invalidResponseCount == 3)
+                        DisplayGoodbye();
+                    else
+                        DisplayMainMenuPrompt();
+                }
                 else
                 {
-                    switch (consoleKeyInfo.Key)
+
+                    if (consoleKeyInfo.Key == ConsoleKey.X)
+                        DisplayGoodbye();
+                    else
                     {
-                        case ConsoleKey.UpArrow:
-                            mainMenu.MoveUp();
-                            break;
-                        case ConsoleKey.DownArrow:
-                            mainMenu.MoveDown();
-                            break;
-                        case ConsoleKey.Enter:
-                            done = true;
-                            break;
+
+
+                        switch (consoleKeyInfo.Key)
+                        {
+                            case ConsoleKey.UpArrow:
+                                mainMenu.MoveUp();
+                                break;
+                            case ConsoleKey.DownArrow:
+                                mainMenu.MoveDown();
+                                break;
+                            case ConsoleKey.Enter:
+                                done = true;
+                                break;
+                        }
+
+
                     }
-                }
 
-
-                if (done == true)
-                {
-                    RaceCardViewerViewModel viewer = DisplayRaceList(mainMenu, fileManager);
-                    PromptForRaceNumber(viewer);
+                    if (done == true)
+                    {
+                        RaceCardViewerViewModel viewer = DisplayRaceMenu(mainMenu, fileManager);
+                        PromptForRaceNumber(viewer);
+                    }
                 }
 
             };
@@ -73,7 +89,40 @@ namespace RaceCardViewer.CoreConsole
 
         }
 
-        private static RaceCardViewerViewModel DisplayRaceList(Menu mainMenu, FileManager fileManager)
+        //private static bool ValidateMainMenuSelection(Menu mainMenu, ConsoleKeyInfo consoleKeyInfo)
+        //{
+        //    bool result = false;
+        //    switch (consoleKeyInfo.Key)
+        //    {
+        //        case ConsoleKey.UpArrow:
+        //            mainMenu.MoveUp();
+        //            break;
+        //        case ConsoleKey.DownArrow:
+        //            mainMenu.MoveDown();
+        //            break;
+        //        case ConsoleKey.Enter:
+        //            result = true;
+        //            break;
+        //    }
+
+        //    return result;
+        //}
+
+        private static void DisplayMainMenuPrompt()
+        {
+            Console.Clear();
+            Console.WriteLine("Welcome to Racecard Viewer");
+            Console.WriteLine();
+            if (_invalidResponseCount > 0)
+                DisplayInvalidAttemptMessage();
+            else
+                Console.WriteLine();
+            Console.WriteLine("Use arrow keys to select a file and press [Enter]. Press 'X' to exit application.");
+            Console.WriteLine();
+
+        }
+
+        private static RaceCardViewerViewModel DisplayRaceMenu(Menu mainMenu, FileManager fileManager)
         {
             FileInfo file = fileManager.GetDataFile(mainMenu.SelectedOption);
             var viewer = new RaceCardViewerViewModel();
@@ -95,17 +144,14 @@ namespace RaceCardViewer.CoreConsole
         private static void PromptForRaceNumber(RaceCardViewerViewModel viewer)
         {
             Console.Clear();
-            DisplayRaceCard(viewer);
-            Console.WriteLine();
-            DisplayRaceList(viewer);
 
-            Console.Write("Enter race number to view ('R' to select a different Race Day) and press [Enter]: ");
+            DisplayRaceNumberSelectionPrompt(viewer);
             string value = Console.ReadLine().Trim();
 
             if (string.IsNullOrEmpty(value))
             {
-                _noResponseCount++;
-                if (_noResponseCount == 3)
+                _invalidResponseCount++;
+                if (_invalidResponseCount == 3)
                     DisplayGoodbye();
                 else
                     PromptForRaceNumber(viewer);
@@ -117,6 +163,31 @@ namespace RaceCardViewer.CoreConsole
 
             }
 
+
+        }
+
+        private static void DisplayRaceNumberSelectionPrompt(RaceCardViewerViewModel viewer)
+        {
+            DisplayRaceCard(viewer);
+            Console.WriteLine();
+            DisplayRaceList(viewer);
+
+            if (_invalidResponseCount > 0) DisplayInvalidAttemptMessage();
+
+            Console.Write("Enter race number to view ('R' to select a different Race Day) and press [Enter]: ");
+        }
+
+        private static void DisplayInvalidAttemptMessage()
+        {
+            var currentColor = Console.ForegroundColor;
+
+            if (_invalidResponseCount == 1)
+                Console.ForegroundColor = ConsoleColor.Red;
+            else
+                Console.ForegroundColor = ConsoleColor.DarkRed;
+
+            Console.WriteLine($"Your selection was invalid. Please try again. This is attempt {_invalidResponseCount + 1} of 3.");
+            Console.ForegroundColor = currentColor;
 
         }
 
@@ -146,8 +217,11 @@ namespace RaceCardViewer.CoreConsole
         {
             exit = true;
             Console.Clear();
+            Console.ForegroundColor = ConsoleColor.Green;
+            Console.WriteLine("Thank you for using Race Card Viewer!");
+            Console.WriteLine("Goodbye.");
             Console.ForegroundColor = ConsoleColor.Gray;
-            Console.WriteLine("Thank you for using Race Card Viewer");
+
         }
 
         private static void DisplayRaceCard(string selectedOption)
