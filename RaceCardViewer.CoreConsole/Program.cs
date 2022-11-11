@@ -9,7 +9,7 @@ namespace RaceCardViewer.CoreConsole
 {
     class Program
     {
-        private const string ApplicationTitle = "Race Card Viewer"; //todo 20221030: move  this to app.config
+        private const string ApplicationTitle = "Race Card Viewer"; 
 
         private static DirectoryManager directoryManager = new DirectoryManager(ApplicationTitle);
         private static FileManager fileManager = new FileManager();
@@ -132,11 +132,6 @@ namespace RaceCardViewer.CoreConsole
             Console.Write("Enter race number to view ('R' to select a different Race Day) and press [Enter]: ");
         }
 
-        //private static void DisplayRaceCard(RaceCardViewerViewModel viewer)
-        //{
-        //    Console.WriteLine();
-        //    DisplayRaceDayHeader(viewer);
-        //}
 
         private static void DisplayRaceDayHeader(RaceCardViewerViewModel viewer)
         {
@@ -243,10 +238,8 @@ namespace RaceCardViewer.CoreConsole
                     DisplayGoodbye();
                     break;
                 default:
-                    ////////////////////////////////////////////////////////////////////////////////////////////////////////
                     DisplayRaceHorses_InvalidMenuOptionPrompt(viewer, race, raceNumber);
                     break;
-                    ////////////////////////////////////////////////////////////////////////////////////////////////////////
 
             }
         }

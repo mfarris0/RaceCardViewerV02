@@ -36,12 +36,6 @@ namespace RaceCardViewer.Business
                     }
                     AddRaceHorse(fields, viewer);
                 }
-                else
-                {
-                    //todo 20221030: log what 'tempRaceNumber' is
-                    // so, implement loggging !
-                    
-                }
 
             }
 

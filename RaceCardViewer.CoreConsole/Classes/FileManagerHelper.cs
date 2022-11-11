@@ -1,6 +1,7 @@
 ﻿using RaceCardViewer.Utility;
 using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.IO;
 using System.IO.Compression;
 using System.Linq;
@@ -9,14 +10,16 @@ namespace RaceCardViewer.CoreConsole
 {
     public class FileManagerHelper
     {
-        private const string SampleFilesZipFile = "SampleFiles.zip"; //todo 20221030: move  this to app.config
-        private const int StarterFileCount = 9; //todo 20221030: move  this to app.config
+        private static string SampleFilesZipFile = ConfigurationManager.AppSettings["SampleFilesZipFile"];
+
+        private static int StarterFileCount = int.Parse(ConfigurationManager.AppSettings["StarterFileCount"]); 
+
         public static bool StarterFilesExist(DirectoryManager directoryManager, FileManager fileManager)
         {
             bool result = false;
 
             LoadDataFileList(directoryManager, fileManager);
-            if(fileManager.DataFileList.Count() == StarterFileCount)
+            if (fileManager.DataFileList.Count() == StarterFileCount)
             {
                 result = true;
             }
