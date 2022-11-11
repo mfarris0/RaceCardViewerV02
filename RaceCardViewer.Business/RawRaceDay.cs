@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Text;
 
 namespace RaceCardViewer.Business
 {
@@ -24,5 +25,4 @@ namespace RaceCardViewer.Business
         public IEnumerable<RawRace> RaceCard { get; set; }
 
     }
-
 }

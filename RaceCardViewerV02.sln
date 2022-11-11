@@ -3,11 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.32802.440
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RaceCardViewer.CoreConsole", "RaceCardViewer.CoreConsole\RaceCardViewer.CoreConsole.csproj", "{F6735A6E-E1B0-4060-A12E-A92D42CE70B4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RaceCardViewer.CoreConsole", "RaceCardViewer.CoreConsole\RaceCardViewer.CoreConsole.csproj", "{F6735A6E-E1B0-4060-A12E-A92D42CE70B4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RaceCardViewer.Business", "RaceCardViewer.Business\RaceCardViewer.Business.csproj", "{E815E25F-5B57-48B1-B019-9E1027DED20D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RaceCardViewer.Business", "RaceCardViewer.Business\RaceCardViewer.Business.csproj", "{E815E25F-5B57-48B1-B019-9E1027DED20D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RaceCardViewer.Utility", "RaceCardViewer.Utility\RaceCardViewer.Utility.csproj", "{E2C861FC-BAEE-4DEC-92AA-2875173C84F3}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RaceCardViewer.Utility", "RaceCardViewer.Utility\RaceCardViewer.Utility.csproj", "{E2C861FC-BAEE-4DEC-92AA-2875173C84F3}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

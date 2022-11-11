@@ -33,6 +33,12 @@ namespace RaceCardViewer.Business
         public string JockeyName { get; }
         public string WeightAllowed { get; }
         public string TrainerName { get; }
+
+        public override string ToString()
+        {
+            string text = $"{PostPosition,2}  {HorseName,-25}  {MorningLineOdds,5}  {JockeyName,-25}  {TrainerName, -30}{WeightAllowed}";
+            return text;
+        }
     }
 
 

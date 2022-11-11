@@ -3,6 +3,7 @@ using RaceCardViewer.Utility;
 using System;
 using System.IO;
 using RaceCardViewer.Business;
+using System.Linq;
 
 namespace RaceCardViewer.CoreConsole
 {
@@ -15,6 +16,8 @@ namespace RaceCardViewer.CoreConsole
 
         public static bool exit = false;
         public static byte _invalidResponseCount = 0;
+
+        const string line = "-----------------------------------------------------------------------------------------------------";
 
         static void Main(string[] args)
         {
@@ -59,8 +62,6 @@ namespace RaceCardViewer.CoreConsole
                         DisplayGoodbye();
                     else
                     {
-
-
                         switch (consoleKeyInfo.Key)
                         {
                             case ConsoleKey.UpArrow:
@@ -73,8 +74,6 @@ namespace RaceCardViewer.CoreConsole
                                 done = true;
                                 break;
                         }
-
-
                     }
 
                     if (done == true)
@@ -86,28 +85,7 @@ namespace RaceCardViewer.CoreConsole
 
             };
 
-
         }
-
-        //private static bool ValidateMainMenuSelection(Menu mainMenu, ConsoleKeyInfo consoleKeyInfo)
-        //{
-        //    bool result = false;
-        //    switch (consoleKeyInfo.Key)
-        //    {
-        //        case ConsoleKey.UpArrow:
-        //            mainMenu.MoveUp();
-        //            break;
-        //        case ConsoleKey.DownArrow:
-        //            mainMenu.MoveDown();
-        //            break;
-        //        case ConsoleKey.Enter:
-        //            result = true;
-        //            break;
-        //    }
-
-        //    return result;
-        //}
-
         private static void DisplayMainMenuPrompt()
         {
             Console.Clear();
@@ -122,25 +100,6 @@ namespace RaceCardViewer.CoreConsole
 
         }
 
-        private static RaceCardViewerViewModel DisplayRaceMenu(Menu mainMenu, FileManager fileManager)
-        {
-            FileInfo file = fileManager.GetDataFile(mainMenu.SelectedOption);
-            var viewer = new RaceCardViewerViewModel();
-            var manager = new RaceCardViewerViewModelManager();
-            manager.Load(file, viewer);
-            return viewer;
-        }
-
-        private static void DisplayRaceList(RaceCardViewerViewModel viewer)
-        {
-            foreach (var race in viewer.RaceCard)
-            {
-                Console.WriteLine($"{race.RaceNumber} {race.Distance} {race.Surface} {race.Classification} {race.Purse} {race.RaceType}");
-                Console.WriteLine();
-
-            }
-        }
-
         private static void PromptForRaceNumber(RaceCardViewerViewModel viewer)
         {
             Console.Clear();
@@ -150,25 +109,18 @@ namespace RaceCardViewer.CoreConsole
 
             if (string.IsNullOrEmpty(value))
             {
-                _invalidResponseCount++;
-                if (_invalidResponseCount == 3)
-                    DisplayGoodbye();
-                else
-                    PromptForRaceNumber(viewer);
+                DisplayInvalidRaceNumberPrompt(viewer);
             }
             else
             {
-                ValidateSelection(value);
-                return;
-
+                ValidateRaceNumberInput(value, viewer);
             }
-
 
         }
 
         private static void DisplayRaceNumberSelectionPrompt(RaceCardViewerViewModel viewer)
         {
-            DisplayRaceCard(viewer);
+            DisplayRaceDayHeader(viewer);
             Console.WriteLine();
             DisplayRaceList(viewer);
 
@@ -176,6 +128,151 @@ namespace RaceCardViewer.CoreConsole
 
             Console.Write("Enter race number to view ('R' to select a different Race Day) and press [Enter]: ");
         }
+
+        //private static void DisplayRaceCard(RaceCardViewerViewModel viewer)
+        //{
+        //    Console.WriteLine();
+        //    DisplayRaceDayHeader(viewer);
+        //}
+
+        private static void DisplayRaceDayHeader(RaceCardViewerViewModel viewer)
+        {
+            DateTime raceDate = ConvertStringToDate(viewer.RawRaceDay.RaceDate);
+           string trackName = GetTrackName(viewer.RawRaceDay.Track);
+
+            Console.WriteLine(line);
+            Console.WriteLine($"{raceDate:D}");
+            Console.WriteLine($"{trackName}");
+            Console.WriteLine(line);
+        }
+
+        private static string GetTrackName(string track)
+        {
+            TrackManager trackManager = new TrackManager();
+            return trackManager.TrackList().FirstOrDefault(l => l.Id == track).Name;
+
+        }
+
+        private static DateTime ConvertStringToDate(string raceDate)
+        {
+            if (!raceDate.IsNumeric()) throw new ArgumentException("RaceDate is not a number.", nameof(raceDate));
+            if (int.Parse(raceDate) <= 0) throw new ArgumentException("RaceDate is an invalid date", nameof(raceDate));
+            
+            int year = int.Parse(raceDate.Substring(0, 4));
+            int month = int.Parse(raceDate.Substring(4, 2));
+            int day = int.Parse(raceDate.Substring(6, 2));
+            DateTime result = new DateTime(year, month, day);
+
+            return result;
+        }
+
+        private static void DisplayRaceList(RaceCardViewerViewModel viewer)
+        {
+            foreach (var race in viewer.RaceCard)
+            {
+                Console.WriteLine($"{race.RaceNumber} {race.Distance} {race.Surface} {race.Classification} {race.Purse} {race.RaceType}");
+                Console.WriteLine();
+            }
+        }
+
+
+        private static RaceCardViewerViewModel DisplayRaceMenu(Menu mainMenu, FileManager fileManager)
+        {
+            FileInfo file = fileManager.GetDataFile(mainMenu.SelectedOption);
+            var viewer = new RaceCardViewerViewModel();
+            var manager = new RaceCardViewerViewModelManager();
+            manager.Load(file, viewer);
+            return viewer;
+        }
+
+
+        private static void ValidateRaceNumberInput(string value, RaceCardViewerViewModel viewer)
+        {
+            if (value.ToLower() == "r")
+                Run();
+            else if (value.IsNumeric())
+            {
+                var race = viewer.RaceCard.FirstOrDefault(r => r.RaceNumber == value);
+                if (race == null)
+                    DisplayInvalidRaceNumberPrompt(viewer);
+                else
+                {
+                    DisplayRaceHorseList(viewer, race);
+                    DisplayRaceHorseListPrompt();
+                    ConsoleKeyInfo consoleKeyInfo = Console.ReadKey(true);
+                    switch (consoleKeyInfo.Key)
+                    {
+                        case ConsoleKey.D:
+                            PromptForRaceNumber(viewer);
+                            break;
+                        case ConsoleKey.C:
+                            Run();
+                            break;
+                        case ConsoleKey.E:
+                            DisplayGoodbye();
+                            break;
+                        default:
+                            DisplayInvalidAttemptMessage();
+                            ValidateRaceNumberInput(value, viewer);
+                            break;
+
+                    }
+
+                }
+            }
+            else
+            {
+                DisplayInvalidRaceNumberPrompt(viewer);
+            }
+
+        }
+
+
+        private static void DisplayRaceHorseList(RaceCardViewerViewModel viewer, RawRace race)
+        {
+            Console.Clear();
+            Console.WriteLine(race.Conditions);
+            var raceHorseList = viewer.RaceHorseList.Where(r => r.RawRaceId == race.RawRaceId);
+
+            DisplayRaceHorseHeader();
+            foreach (var raceHorse in raceHorseList)
+            {
+                Console.WriteLine(raceHorse);
+            }
+        }
+
+        private static void DisplayRaceHorseHeader()
+        {
+            const string PostPosition = "PP";
+            const string HorseName = "Horse";
+            const string MorningLineOdds = "Odds";
+            const string JockeyName = "Jockey";
+            const string TrainerName = "Trainer";
+            const string WeightAllowed = "Weight";
+
+            string text = $"{PostPosition,2}  {HorseName,-25}  {MorningLineOdds,5}  {JockeyName,-25}  {TrainerName,-30}{WeightAllowed}";
+
+            Console.WriteLine(line);
+            Console.WriteLine(text);
+            Console.WriteLine(line);
+        }
+
+        private static void DisplayRaceHorseListPrompt()
+        {
+            Console.WriteLine();
+            Console.WriteLine($"(D)isplay another Race | (C)hoose another Race Day | (E)xit Application");
+
+        }
+
+        private static void DisplayInvalidRaceNumberPrompt(RaceCardViewerViewModel viewer)
+        {
+            _invalidResponseCount++;
+            if (_invalidResponseCount == 3)
+                DisplayGoodbye();
+            else
+                PromptForRaceNumber(viewer);
+        }
+
 
         private static void DisplayInvalidAttemptMessage()
         {
@@ -191,27 +288,7 @@ namespace RaceCardViewer.CoreConsole
 
         }
 
-        private static void ValidateSelection(string value)
-        {
-            if (value.ToLower() == "r")
-                Run();
-            else if (value.IsNumeric())
-            {
-                throw new NotImplementedException("Validate race number");
-            }
-            else
-            {
-                throw new NotImplementedException("Race number is not valid.");
-            }
-        }
 
-
-        private static void DisplayRaceCard(RaceCardViewerViewModel viewer)
-        {
-            Console.WriteLine();
-            Console.WriteLine($"{viewer.RawRaceDay.RaceDate} {viewer.RawRaceDay.Track}");
-
-        }
 
         private static void DisplayGoodbye()
         {
@@ -281,5 +358,7 @@ namespace RaceCardViewer.CoreConsole
         #endregion ----- Directory and File Setup -----
 
     }
+
+
 }
 
