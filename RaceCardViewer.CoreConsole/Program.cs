@@ -78,6 +78,8 @@ namespace RaceCardViewer.CoreConsole
 
                     if (done == true)
                     {
+                        _invalidResponseCount = 0;
+                        Console.ForegroundColor = ConsoleColor.Gray;
                         RaceCardViewerViewModel viewer = DisplayRaceMenu(mainMenu, fileManager);
                         PromptForRaceNumber(viewer);
                     }
@@ -124,7 +126,8 @@ namespace RaceCardViewer.CoreConsole
             Console.WriteLine();
             DisplayRaceList(viewer);
 
-            if (_invalidResponseCount > 0) DisplayInvalidAttemptMessage();
+            if (_invalidResponseCount > 0) 
+                DisplayInvalidAttemptMessage();
 
             Console.Write("Enter race number to view ('R' to select a different Race Day) and press [Enter]: ");
         }
@@ -186,38 +189,19 @@ namespace RaceCardViewer.CoreConsole
         }
 
 
-        private static void ValidateRaceNumberInput(string value, RaceCardViewerViewModel viewer)
+        private static void ValidateRaceNumberInput(string raceNumber, RaceCardViewerViewModel viewer)
         {
-            if (value.ToLower() == "r")
+            if (raceNumber.ToLower() == "r")
                 Run();
-            else if (value.IsNumeric())
+            else if (raceNumber.IsNumeric())
             {
-                var race = viewer.RaceCard.FirstOrDefault(r => r.RaceNumber == value);
+                RawRace race = viewer.RaceCard.FirstOrDefault(r => r.RaceNumber == raceNumber);
                 if (race == null)
                     DisplayInvalidRaceNumberPrompt(viewer);
                 else
                 {
-                    DisplayRaceHorseList(viewer, race);
-                    DisplayRaceHorseListPrompt();
-                    ConsoleKeyInfo consoleKeyInfo = Console.ReadKey(true);
-                    switch (consoleKeyInfo.Key)
-                    {
-                        case ConsoleKey.D:
-                            PromptForRaceNumber(viewer);
-                            break;
-                        case ConsoleKey.C:
-                            Run();
-                            break;
-                        case ConsoleKey.E:
-                            DisplayGoodbye();
-                            break;
-                        default:
-                            DisplayInvalidAttemptMessage();
-                            ValidateRaceNumberInput(value, viewer);
-                            break;
-
-                    }
-
+                    _invalidResponseCount = 0;
+                    DisplayRaceHorses(viewer, race, raceNumber);
                 }
             }
             else
@@ -226,8 +210,55 @@ namespace RaceCardViewer.CoreConsole
             }
 
         }
+        private static void DisplayInvalidRaceNumberPrompt(RaceCardViewerViewModel viewer)
+        {
+            _invalidResponseCount++;
+            if (_invalidResponseCount == 3)
+                DisplayGoodbye();
+            else
+                PromptForRaceNumber(viewer);
+        }
 
+        private static void DisplayRaceHorses(RaceCardViewerViewModel viewer, RawRace race, string raceNumber)
+        {
+            DisplayRaceHorseList(viewer, race);
+            DisplayRaceHorseListPrompt();
 
+            if (_invalidResponseCount > 0)
+                DisplayInvalidAttemptMessage();
+
+            ConsoleKeyInfo consoleKeyInfo = Console.ReadKey(true);
+
+            switch (consoleKeyInfo.Key)
+            {
+                case ConsoleKey.D:
+                    _invalidResponseCount = 0;
+                    PromptForRaceNumber(viewer);
+                    break;
+                case ConsoleKey.C:
+                    _invalidResponseCount = 0;
+                    Run();
+                    break;
+                case ConsoleKey.E:
+                    DisplayGoodbye();
+                    break;
+                default:
+                    ////////////////////////////////////////////////////////////////////////////////////////////////////////
+                    DisplayRaceHorses_InvalidMenuOptionPrompt(viewer, race, raceNumber);
+                    break;
+                    ////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+            }
+        }
+
+        private static void DisplayRaceHorses_InvalidMenuOptionPrompt(RaceCardViewerViewModel viewer, RawRace race, string raceNumber)
+        {
+            _invalidResponseCount++;
+            if (_invalidResponseCount == 3)
+                DisplayGoodbye();
+            else
+                DisplayRaceHorses(viewer, race, raceNumber);
+        }
         private static void DisplayRaceHorseList(RaceCardViewerViewModel viewer, RawRace race)
         {
             Console.Clear();
@@ -260,17 +291,9 @@ namespace RaceCardViewer.CoreConsole
         private static void DisplayRaceHorseListPrompt()
         {
             Console.WriteLine();
+            Console.WriteLine();
             Console.WriteLine($"(D)isplay another Race | (C)hoose another Race Day | (E)xit Application");
 
-        }
-
-        private static void DisplayInvalidRaceNumberPrompt(RaceCardViewerViewModel viewer)
-        {
-            _invalidResponseCount++;
-            if (_invalidResponseCount == 3)
-                DisplayGoodbye();
-            else
-                PromptForRaceNumber(viewer);
         }
 
 
