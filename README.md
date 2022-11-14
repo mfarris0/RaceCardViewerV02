@@ -10,7 +10,7 @@ The user will be prompted with a list of datafiles to choose from for a given da
 
 ## Technologies Used
 
-The application will be written in C# and target .NET 5.0. It will demonstrate the use of classes along with generic list and dictionary. It will also demonstrate accessing the file system and creation of directories and files.
+The application will be written in C# and target .NET Core 3.1. It will demonstrate the use of classes along with generic list and dictionary. It will also demonstrate accessing the file system and creation of directories and files.
 Further, it demonstrates a simple RaceCardViewerViewModel class as well as a manager for the class to facilitate loading data. As an extra, the application references the Microsoft.VisualBasic namespace to make use of it's TextFieldParser class. This class does a excellent job of reading a CSV file that contains string fields enclosed with double-quotes along with numeric fields with no quotes.
 
 ---
@@ -29,10 +29,15 @@ Further, it demonstrates a simple RaceCardViewerViewModel class as well as a man
  ### RaceCardViewer.Business
  - RaceCardViewerViewModel
  - RaceCardViewerViewModelManager
+ - RaceType
+ - RaceTypeManager	
  - RawRace
  - RawRaceDay
  - RawRaceHorse
+ - Surface
+ - SurfaceManager
  - Track
+ - TrackManager
  ### RaceCardViewer.CoreConsole (Main App)
  - DirectoryManager
  - DirectoryManagerHelper
