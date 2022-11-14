@@ -135,8 +135,9 @@ namespace RaceCardViewer.CoreConsole
 
         private static void DisplayRaceDayHeader(RaceCardViewerViewModel viewer)
         {
+            TrackManager trackManager = new TrackManager();
             DateTime raceDate = ConvertStringToDate(viewer.RawRaceDay.RaceDate);
-           string trackName = GetTrackName(viewer.RawRaceDay.Track);
+           string trackName = trackManager.GetTrackName(viewer.RawRaceDay.Track);
 
             Console.WriteLine(line);
             Console.WriteLine($"{raceDate:D}");
@@ -144,13 +145,7 @@ namespace RaceCardViewer.CoreConsole
             Console.WriteLine(line);
         }
 
-        private static string GetTrackName(string track)
-        {
-            TrackManager trackManager = new TrackManager();
-            return trackManager.TrackList().FirstOrDefault(l => l.Id == track).Name;
-
-        }
-
+        
         private static DateTime ConvertStringToDate(string raceDate)
         {
             if (!raceDate.IsNumeric()) throw new ArgumentException("RaceDate is not a number.", nameof(raceDate));
@@ -166,9 +161,16 @@ namespace RaceCardViewer.CoreConsole
 
         private static void DisplayRaceList(RaceCardViewerViewModel viewer)
         {
+            RawRaceManager rawRaceManager = new RawRaceManager();
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////'
+            const string head = "Race   Purse    Race Type                    Surface  Distance";
+            ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////'
+
+            Console.WriteLine(head);
+            Console.WriteLine(line);
             foreach (var race in viewer.RaceCard)
             {
-                Console.WriteLine($"{race.RaceNumber} {race.Distance} {race.Surface} {race.Classification} {race.Purse} {race.RaceType}");
+                Console.WriteLine($"{rawRaceManager.GetDetailLine(race)}");
                 Console.WriteLine();
             }
         }
